@@ -10,6 +10,7 @@ import {
   getPosts, createPost, likePost, commentOnPost, editPost, deletePost
 } from './controllers/postController.js';
 import { authenticateToken } from './middleware/auth.js';
+import { decryptJoobleKey } from './utils/security.js';
 
 dotenv.config();
 
@@ -26,7 +27,12 @@ app.use(express.json());
 
 // Public API operational health check route
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'JobTrack API is fully operational' });
+  const joobleActive = !!decryptJoobleKey();
+  res.json({ 
+    status: 'OK', 
+    message: 'JobTrack API is fully operational',
+    joobleActive 
+  });
 });
 
 // Authentication Routes

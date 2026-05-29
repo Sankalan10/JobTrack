@@ -68,8 +68,21 @@ export default function JobDiscovery({ jobs, onJobAdded, setView }) {
     }
   };
 
+  const [joobleActive, setJoobleActive] = useState(false);
+
   // Run initial search on mount
   useEffect(() => {
+    const checkApiStatus = async () => {
+      try {
+        const res = await axios.get(`${API_BASE}/health`);
+        if (res.data && res.data.joobleActive) {
+          setJoobleActive(true);
+        }
+      } catch (err) {
+        console.error('Error checking API health:', err);
+      }
+    };
+    checkApiStatus();
     handleSearch();
   }, []);
 
@@ -147,10 +160,16 @@ export default function JobDiscovery({ jobs, onJobAdded, setView }) {
       {/* Overview Dashboard Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-left">
         <div>
-          <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2 select-none">
+          <h2 className="text-xl font-bold text-white tracking-tight flex flex-wrap items-center gap-2 select-none">
             <Briefcase className="h-5 w-5 text-[#2BB794]" />
             <span>Job Discovery Center</span>
             <span className="text-[9px] bg-[#ffd167]/10 border border-[#ffd167]/20 text-[#ffd167] px-2 py-0.5 rounded font-black uppercase tracking-wider select-none animate-pulse">Real-Time Search</span>
+            {joobleActive && (
+              <span className="text-[9px] bg-[#2BB794]/15 border border-[#2BB794]/30 text-[#2BB794] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wide flex items-center gap-1.5 select-none shadow-[0_0_10px_rgba(43,183,148,0.15)] ml-1">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#2BB794] animate-pulse shrink-0" />
+                <span>Jooble API Connected</span>
+              </span>
+            )}
           </h2>
           <p className="text-slate-400 text-xs mt-1 font-light">
             Search live job openings across premium developer networks and instantly funnel them directly onto your Kanban board.
