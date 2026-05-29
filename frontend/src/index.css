@@ -1,0 +1,146 @@
+@import "tailwindcss";
+
+@theme {
+  --color-purple-50: #eefcf8;
+  --color-purple-100: #d0f7ec;
+  --color-purple-200: #a3eed9;
+  --color-purple-300: #6fdfbf;
+  --color-purple-400: #3fcca2;
+  --color-purple-500: #2bb794; /* Apna Jungle Green */
+  --color-purple-600: #1e9d7c;
+  --color-purple-700: #197f66;
+  --color-purple-800: #176553;
+  --color-purple-900: #155346;
+  --color-purple-950: #0a3029;
+
+  --color-indigo-50: #eefdf8;
+  --color-indigo-100: #d4f7eb;
+  --color-indigo-200: #a9eeeb;
+  --color-indigo-300: #71dfc5;
+  --color-indigo-400: #42cca8;
+  --color-indigo-500: #2bb794; 
+  --color-indigo-600: #1e9d7c;
+  --color-indigo-700: #197f66;
+  --color-indigo-800: #176553;
+  --color-indigo-900: #155346;
+  --color-indigo-950: #0a3029;
+}
+
+@layer base {
+  :root {
+    --background: 224 71% 4%;
+    --foreground: 210 40% 98%;
+    --card: 224 71% 4%;
+    --card-foreground: 210 40% 98%;
+    --popover: 224 71% 4%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 164.7 61.9% 44.3%; /* Mapped to Jungle Green */
+    --primary-foreground: 210 40% 98%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 164.7 61.9% 44.3%;
+    --radius: 0.75rem;
+  }
+}
+
+/* Custom Premium UI Additions */
+body {
+  margin: 0;
+  font-family: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: #0b0f19;
+  color: #f1f5f9;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar for columns & page */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.3);
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(43, 183, 148, 0.3);
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(43, 183, 148, 0.6);
+}
+
+/* Glassmorphism Styles */
+.glass-panel {
+  background: rgba(17, 24, 39, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card {
+  background: rgba(30, 41, 59, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: rgba(43, 183, 148, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 20px -8px rgba(43, 183, 148, 0.2);
+}
+
+.glass-input {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+}
+
+.glass-input:focus {
+  outline: none;
+  border-color: #2bb794;
+  box-shadow: 0 0 0 2px rgba(43, 183, 148, 0.2);
+  background: rgba(15, 23, 42, 0.85);
+}
+
+/* Custom pulse animations for countdown widgets */
+@keyframes soft-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+  }
+}
+
+.warning-pulse {
+  animation: soft-pulse 2s infinite;
+}
+
+/* Recharts styling tweaks */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: rgba(255, 255, 255, 0.05);
+}
+.recharts-text {
+  fill: #94a3b8 !important;
+  font-size: 11px;
+}
+.recharts-legend-item-text {
+  color: #cbd5e1 !important;
+}

@@ -1,0 +1,43 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id             String   @id @default(uuid())
+  email          String   @unique
+  password       String
+  name           String
+  role           String   @default("STUDENT") // "STUDENT" or "RECRUITER"
+  company        String?                      // represented company for recruiters
+  resumeUploaded Boolean  @default(true)
+  resumeData     String?                      // stores JSON string of resume details
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  jobs           Job[]
+}
+
+model Job {
+  id             String   @id @default(uuid())
+  company        String
+  role           String
+  descriptionUrl String?
+  salary         String?
+  appliedDate    String
+  status         String   // "APPLIED", "INTERVIEWING", "OFFERED", "REJECTED"
+  interviewDate  String?
+  notes          String   @default("")
+  checklist      String   @default("[]")
+  activityLog    String   @default("[]")
+  resumeMatcherData String @default("{}")
+  salaryCalculatorData String @default("{}")
+  recruiterFeedback String @default("{}")
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
