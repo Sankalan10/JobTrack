@@ -6,6 +6,8 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
+
 export default function Auth({ onLoginSuccess }) {
   const [isLogin, setIsLogin] = useState(true);
   const [role, setRole] = useState('STUDENT'); // 'STUDENT' or 'RECRUITER'
@@ -101,7 +103,7 @@ export default function Auth({ onLoginSuccess }) {
         };
 
     try {
-      const response = await axios.post(`http://localhost:5000${endpoint}`, payload);
+      const response = await axios.post(`${API_BASE}${endpoint}`, payload);
       const { token, user } = response.data;
       onLoginSuccess(token, user);
     } catch (err) {

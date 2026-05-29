@@ -5,7 +5,9 @@ import {
   MapPin, Settings, Key, Info, HelpCircle, ShieldCheck, Database, Sliders, RotateCw
 } from 'lucide-react';
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = import.meta.env.VITE_API_BASE 
+  ? `${import.meta.env.VITE_API_BASE}/api` 
+  : 'http://localhost:5000/api';
 
 export default function JobDiscovery({ jobs, onJobAdded, setView }) {
   const [query, setQuery] = useState('React Developer');

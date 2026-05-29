@@ -6,7 +6,9 @@ import {
   Edit3, Trash2, Bookmark, ChevronDown, ChevronUp, FolderOpen, X
 } from 'lucide-react';
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = import.meta.env.VITE_API_BASE 
+  ? `${import.meta.env.VITE_API_BASE}/api` 
+  : 'http://localhost:5000/api';
 
 export default function FeedPortal({ jobs, onJobApplied, setView }) {
   const [posts, setPosts] = useState([]);
