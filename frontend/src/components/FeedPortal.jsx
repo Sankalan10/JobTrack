@@ -24,7 +24,7 @@ export default function FeedPortal({ jobs, onJobApplied, setView }) {
   const currentUser = useMemo(() => {
     try {
       const stored = localStorage.getItem('jobtrack_user');
-      return stored ? JSON.parse(stored) : null;
+      return stored && stored !== 'undefined' ? JSON.parse(stored) : null;
     } catch {
       return null;
     }

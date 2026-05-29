@@ -24,8 +24,13 @@ const API_BASE = import.meta.env.VITE_API_BASE
 export default function App() {
   const [token, setToken] = useState(() => localStorage.getItem('jobtrack_token'));
   const [user, setUser] = useState(() => {
-    const cached = localStorage.getItem('jobtrack_user');
-    return cached ? JSON.parse(cached) : null;
+    try {
+      const cached = localStorage.getItem('jobtrack_user');
+      return cached && cached !== 'undefined' ? JSON.parse(cached) : null;
+    } catch (err) {
+      console.error('Error parsing cached user:', err);
+      return null;
+    }
   });
 
   const [jobs, setJobs] = useState([]);
