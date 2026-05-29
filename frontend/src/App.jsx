@@ -17,7 +17,9 @@ import JobDiscovery from './components/JobDiscovery';
 
 const API_BASE = import.meta.env.VITE_API_BASE 
   ? `${import.meta.env.VITE_API_BASE}/api` 
-  : 'http://localhost:5000/api';
+  : typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+  ? 'http://localhost:5000/api'
+  : '/_/backend/api';
 
 export default function App() {
   const [token, setToken] = useState(() => localStorage.getItem('jobtrack_token'));
