@@ -1018,7 +1018,63 @@ export const searchRealJobs = async (req, res) => {
     }
   }
 
-  // Tier 2: Try Keyless Fallback API (Arbeitnow)
+  // Tier 2: Try Keyless Fallback API (Himalayas - Global Remote Tech Jobs)
+  try {
+    console.log(`[JobSearch] Querying Keyless Fallback API (Himalayas)...`);
+    const himalayasUrl = `https://himalayas.app/jobs/api/search?q=${encodeURIComponent(queryWhat || 'React Developer')}&limit=30`;
+    const response = await axios.get(himalayasUrl, { timeout: 6000 });
+
+    if (response.data && response.data.jobs) {
+      let jobsList = response.data.jobs;
+
+      // Filter locally by location if provided
+      if (queryWhere) {
+        const loc = queryWhere.toLowerCase().trim();
+        jobsList = jobsList.filter(item => {
+          const matchedLocation = item.locationRestrictions && item.locationRestrictions.some(l => l.toLowerCase().includes(loc));
+          const matchedDesc = item.description && item.description.toLowerCase().includes(loc);
+          return matchedLocation || matchedDesc;
+        });
+      }
+
+      const results = jobsList.map((item) => {
+        const domain = getDomain(item.companyName);
+        let salaryStr = 'Salary not listed';
+        if (item.minSalary && item.maxSalary) {
+          const minStr = Math.round(item.minSalary).toLocaleString('en-IN');
+          const maxStr = Math.round(item.maxSalary).toLocaleString('en-IN');
+          salaryStr = `${item.currency || '$'}${minStr} - ${item.currency || '$'}${maxStr}`;
+        } else if (item.minSalary) {
+          const minStr = Math.round(item.minSalary).toLocaleString('en-IN');
+          salaryStr = `${item.currency || '$'}${minStr}`;
+        }
+
+        return {
+          id: `jbl-${item.guid || item.applicationLink || Math.random().toString()}`, // Map to jbl- prefix so frontend styles it as premium Live Feed!
+          title: item.title,
+          company: item.companyName,
+          location: item.locationRestrictions && item.locationRestrictions.length > 0 
+            ? item.locationRestrictions.join(', ') 
+            : 'Remote',
+          description: item.excerpt || stripHtml(item.description).substring(0, 300),
+          url: item.applicationLink,
+          salary: salaryStr,
+          created: item.pubDate ? new Date(item.pubDate * 1000).toISOString() : new Date().toISOString(),
+          logoUrl: item.companyLogo || `https://www.google.com/s2/favicons?domain=${domain}&sz=64`
+        };
+      });
+
+      console.log(`[JobSearch] Keyless Fallback (Himalayas) successfully returned ${results.length} results.`);
+      if (results.length > 0) {
+        return res.json(results);
+      }
+    }
+  } catch (error) {
+    console.error('[JobSearch] Keyless Fallback (Himalayas) failed or timed out:', error.message);
+    // Fall through to next tier (Arbeitnow)
+  }
+
+  // Tier 3: Try Keyless Fallback API (Arbeitnow)
   try {
     console.log(`[JobSearch] Querying Keyless Fallback API (Arbeitnow)...`);
     const arbeitnowUrl = 'https://www.arbeitnow.com/api/job-board-api';
