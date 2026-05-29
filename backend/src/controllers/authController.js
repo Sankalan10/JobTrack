@@ -85,6 +85,37 @@ export const login = async (req, res) => {
 
   try {
     const normalizedEmail = email.toLowerCase().trim();
+
+    // Database-less mock login bypass for Vercel!
+    if (
+      (normalizedEmail === 'demo@jobtrack.com' && password === 'password') ||
+      (normalizedEmail === 'recruiter@jobtrack.com' && password === 'password')
+    ) {
+      const isRecruiter = normalizedEmail === 'recruiter@jobtrack.com';
+      const mockUser = isRecruiter
+        ? { 
+            id: 'demo-recruiter-id', 
+            email: 'recruiter@jobtrack.com', 
+            name: 'Demo Recruiter (5-Company)', 
+            role: 'RECRUITER', 
+            company: 'Google, Swiggy, Stripe, CRED, Zomato' 
+          }
+        : { 
+            id: 'demo-student-id', 
+            email: 'demo@jobtrack.com', 
+            name: 'Demo Student', 
+            role: 'STUDENT' 
+          };
+
+      const token = jwt.sign(
+        { userId: mockUser.id, email: mockUser.email, role: mockUser.role, company: mockUser.company || null },
+        JWT_SECRET,
+        { expiresIn: '7d' }
+      );
+
+      return res.json({ token, user: mockUser });
+    }
+
     let user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
     
     // Auto-create and seed student demo account on login if it doesn't exist
